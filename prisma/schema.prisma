@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+  moduleFormat = "esm"
+  generatedFileExtension = "ts"
+  importFileExtension = "ts"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Project {
+  id    Int     @id @default(autoincrement())
+  name  String
+  timeEntries TimeEntry[]
+}
+
+model TimeEntry {
+  id    Int     @id @default(autoincrement())
+  startTime DateTime
+  project    Project    @relation(fields: [projectId], references: [id])
+  projectId  Int
+  hours Decimal @db.Decimal(5,2)
+  description  String
+}
